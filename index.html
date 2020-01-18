@@ -3,14 +3,153 @@
 <head>
 <title>Sorting Visualiztion</title>
 </head>
+<body onload="initialize()">
+	<div id="wrapper"> 
+	<h1>Sorting Visualizer</h1>
 
+	<div class="tab">
+		<button onclick="sort('bubble')"class="tablinks" id="defaultOpen">Bubble Sort</button>
+		<button onclick="sort('merge')"class="tablinks">Merge Sort</button>
+		<button onclick="sort('selection')"class="tablinks">Selection Sort</button>
+		<button onclick="sort('insertion')"class="tablinks">Insertion Sort</button>
+		<button onclick="sort('quick')"class="tablinks">Quick Sort</button>
+		<button onclick="sort('counting')"class="tablinks">Counting Sort</button>
+		<button onclick="sort('radix')"class="tablinks">Radix Sort</button>
+	</div>
 
-<body>
-
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+	<div class="box">
+		<div class="array"> </div>
+ 	</div>
+ </div>
 
 </body>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+	function initialize() {
+
+		LENGTH = 25; //length of array.
+		MAX_VALUE = 100; //Max value in array.
+		arr = generateRandomArray(LENGTH, MAX_VALUE);
+		displayArray(arr);
+
+	}
+
+	function sort(type) {
+		
+		switch (type) {
+			case 'merge':
+	
+			case 'bubble':
+				len = arr.length;
+				for (i = 0; i < len-1; i++) {
+					for(j = 0; j < len-i-1; j++) {
+						if(arr[j] > arr[j+1]) {
+							temp = arr[j];
+							arr[j] = arr[j+1];
+							arr[j+1] = temp;
+							
+													}
+					}
+				}
+				console.log('bubble');
+			case 'selection':
+				console.log('selection');
+			case 'insertion':
+				console.log('insertion');
+			case 'counting':
+				console.log('counting');
+			case 'quick':
+				console.log('quick');
+			case 'radix':
+				console.log('radix');
+		}
+	}
+
+ 	function generateRandomArray(length, max) {
+		return Array(length).fill().map(() => Math.round(Math.random() * max));
+	}
+
+	function displayArray(arr) {
+		width = 1000/LENGTH;
+		for (i = 0; i < LENGTH; i ++) {
+			var elm = document.createElement("div");
+			elm.id = 'elm';
+			//elm.innerHTML = arr[i];
+			elm.style.backgroundColor = 'black';
+			elm.style.width = "" + width + "px";
+			elm.style.height = "" + (500/MAX_VALUE)*arr[i] + "px";
+			document.body.getElementsByClassName("array")[0].appendChild(elm);
+
+		}
+		console.log(arr);
+	}
+	
 
 
+
+</script>
+
+
+<style>
+	* {
+		margin:0;
+		padding: 0;
+	}
+	#wrapper {
+		margin-left: auto;
+		margin-right: auto;
+		width:1020px;
+	}
+	#elm {
+		position: relative;
+		float:left;
+		/*width:0px; /*changes based on number of length of array (1000/SIZE)*/
+		/*height:0px; /*changes based on the value in the array (500/HIGHEST VALUE) * VALUE*/
+		/*background-color:orange;*/
+	}
+	.array {
+	  	/*border: 1px solid black; */
+		align-self: center;
+		width:1000px; 
+		height:20px;
+	}
+	.box {
+		display: flex;
+		flex-direction: column;
+		height: 500px;
+		border: 1px solid #ccc;
+
+	}
+	h1 {
+		position: relative;
+	}
+	.tab {
+		position:relative;
+		overflow: hidden;
+		border: 1px solid #ccc;
+		background-color: #f1f1f1;
+	}
+
+	.tab button {
+		background-color: inherit;
+		float:left;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 14px 16px;
+		transition: 0.3s;
+		font-size:17px;
+	}
+
+	.tab button:hover {
+		background-color: #ddd;
+	}
+
+	.tab button.active {
+		background-color: #ccc;
+	}
+
+
+
+</style>
 </html>
