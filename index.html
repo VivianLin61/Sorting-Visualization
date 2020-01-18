@@ -27,10 +27,11 @@
 <script type="text/javascript">
 	function initialize() {
 
-		LENGTH = 25; //length of array.
+		LENGTH = 100; //length of array.
 		MAX_VALUE = 100; //Max value in array.
-		arr = generateRandomArray(LENGTH, MAX_VALUE);
-		displayArray(arr);
+		SPEED = 10;
+		ARR = generateRandomArray(LENGTH, MAX_VALUE);
+		displayArray(ARR);
 
 	}
 
@@ -38,31 +39,61 @@
 		
 		switch (type) {
 			case 'merge':
-	
+				swap(0,9);
+				break;
 			case 'bubble':
-				len = arr.length;
-				for (i = 0; i < len-1; i++) {
-					for(j = 0; j < len-i-1; j++) {
-						if(arr[j] > arr[j+1]) {
-							temp = arr[j];
-							arr[j] = arr[j+1];
-							arr[j+1] = temp;
-							
-													}
+				let swaps = [];
+				for (let i = 0; i < LENGTH-1; i++) {
+					for(let j = 0; j < LENGTH-i-1; j++) {
+						if(ARR[j] > ARR[j+1]) {
+							temp = ARR[j];
+							ARR[j] = ARR[j+1];
+							ARR[j+1] = temp;
+							swaps.push([j, j+1]);
+						}
 					}
 				}
-				console.log('bubble');
+				displaySwaps(swaps)
+				break;
 			case 'selection':
-				console.log('selection');
+				
+				break;
 			case 'insertion':
 				console.log('insertion');
+				break;
 			case 'counting':
 				console.log('counting');
+				break;
 			case 'quick':
 				console.log('quick');
+				break;
 			case 'radix':
 				console.log('radix');
+				break;
 		}
+	}
+
+		function displaySwaps(swaps) {
+			let k = 0;
+    			setInterval(function () {
+    				if(k < swaps.length){
+        				swapNodes(swaps[k][0],swaps[k][1]);
+        					k++;
+    				}
+    				clearInterval();
+    				},SPEED);
+		}
+
+		function swapNodes(idx1, idx2) {
+	    var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
+	    var node1= elements[idx1];
+	    var node2 = elements[idx2];
+	
+		const parent = node2.parentNode;
+		const afterNode2 = node2.nextElementSibling;
+		node1.replaceWith(node2);
+		parent.insertBefore(node1, afterNode2);
+
 	}
 
  	function generateRandomArray(length, max) {
@@ -73,7 +104,7 @@
 		width = 1000/LENGTH;
 		for (i = 0; i < LENGTH; i ++) {
 			var elm = document.createElement("div");
-			elm.id = 'elm';
+			elm.className = 'elm';
 			//elm.innerHTML = arr[i];
 			elm.style.backgroundColor = 'black';
 			elm.style.width = "" + width + "px";
@@ -100,7 +131,7 @@
 		margin-right: auto;
 		width:1020px;
 	}
-	#elm {
+	.elm {
 		position: relative;
 		float:left;
 		/*width:0px; /*changes based on number of length of array (1000/SIZE)*/
