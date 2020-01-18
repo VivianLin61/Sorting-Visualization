@@ -26,23 +26,21 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">
 	function initialize() {
-
 		LENGTH = 100; //length of array.
 		MAX_VALUE = 100; //Max value in array.
-		SPEED = 10;
+		SPEED = 100;
 		ARR = generateRandomArray(LENGTH, MAX_VALUE);
 		displayArray(ARR);
-
 	}
 
 	function sort(type) {
-		
+		let swaps = [];
 		switch (type) {
 			case 'merge':
-				swap(0,9);
+				console.log('merge');
 				break;
 			case 'bubble':
-				let swaps = [];
+			swaps = [];
 				for (let i = 0; i < LENGTH-1; i++) {
 					for(let j = 0; j < LENGTH-i-1; j++) {
 						if(ARR[j] > ARR[j+1]) {
@@ -56,9 +54,27 @@
 				displaySwaps(swaps)
 				break;
 			case 'selection':
+			swaps = [];
+				for (var i = 0; i < LENGTH-1; i++) {
+					let min_idx = i;
+					for (var j = i + 1; j < LENGTH; j++) {
+						if (ARR[j] < ARR[min_idx]) {
+							min_idx = j;
+						}
+					}
+					temp = ARR[min_idx];
+					ARR[min_idx] = ARR[i];
+					ARR[i] = temp;
+					swaps.push([i,min_idx]);
+				}
+				displaySwaps(swaps);
 				
 				break;
 			case 'insertion':
+			swaps = [];
+				for (var i = 0; i < LENGTH; i ++) {
+					
+				}
 				console.log('insertion');
 				break;
 			case 'counting':
