@@ -23,59 +23,28 @@
  </div>
 
 </body>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">
 	function initialize() {
-		LENGTH = 100; //length of array.
+		LENGTH = 10; //length of array.
 		MAX_VALUE = 100; //Max value in array.
-		SPEED = 100;
+		SPEED = 1000;
 		ARR = generateRandomArray(LENGTH, MAX_VALUE);
 		displayArray(ARR);
 	}
 
 	function sort(type) {
-		let swaps = [];
 		switch (type) {
 			case 'merge':
 				console.log('merge');
 				break;
 			case 'bubble':
-			swaps = [];
-				for (let i = 0; i < LENGTH-1; i++) {
-					for(let j = 0; j < LENGTH-i-1; j++) {
-						if(ARR[j] > ARR[j+1]) {
-							temp = ARR[j];
-							ARR[j] = ARR[j+1];
-							ARR[j+1] = temp;
-							swaps.push([j, j+1]);
-						}
-					}
-				}
-				displaySwaps(swaps)
+				bubbleSort(ARR);
 				break;
 			case 'selection':
-			swaps = [];
-				for (var i = 0; i < LENGTH-1; i++) {
-					let min_idx = i;
-					for (var j = i + 1; j < LENGTH; j++) {
-						if (ARR[j] < ARR[min_idx]) {
-							min_idx = j;
-						}
-					}
-					temp = ARR[min_idx];
-					ARR[min_idx] = ARR[i];
-					ARR[i] = temp;
-					swaps.push([i,min_idx]);
-				}
-				displaySwaps(swaps);
-				
+				selectionSort(ARR);
 				break;
 			case 'insertion':
-			swaps = [];
-				for (var i = 0; i < LENGTH; i ++) {
-					
-				}
-				console.log('insertion');
+				insertionSort(ARR);
 				break;
 			case 'counting':
 				console.log('counting');
@@ -89,7 +58,91 @@
 		}
 	}
 
-		function displaySwaps(swaps) {
+	function clearArr() {
+		const myNode = document.getElementsByClassName('box')[0].getElementsByClassName('array')[0];
+		while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+		}
+
+	}
+	function insertionSort(arr) {
+		clearArr();
+		displayArray(ARR);
+			insertions = [];
+			for (var i = 1; i < LENGTH; i++) {
+				var key = arr[i];
+				var j = i - 1;
+				while (j >= 0 && arr[j] > key) {
+					arr[j + 1] = arr[j];
+					j --;
+				}
+				var insert = j + 1;
+				arr[insert] = key;
+				insertions.push([i, insert]);
+			}
+		displayInsertion(insertions);
+
+	}
+
+	function displayInsertion(insertions) {
+		let k = 0;
+    			setInterval(function () {
+    				if(k < insertions.length){
+        				insert(insertions[k][0],insertions[k][1]);
+        					k++;
+    				}
+    				clearInterval();
+    				},SPEED);
+		}
+		
+
+		
+
+	function insert(keyPos, insertPos) {
+		var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
+		var parent = elements[keyPos].parentNode;
+		var elm = elements[keyPos];
+		parent.insertBefore(elm,elements[insertPos]);
+	}
+
+
+	function bubbleSort(arr) {
+		clearArr();
+		displayArray(ARR);
+		swaps = [];
+				for (let i = 0; i < LENGTH-1; i++) {
+					for(let j = 0; j < LENGTH-i-1; j++) {
+						if(arr[j] > arr[j+1]) {
+							temp = arr[j];
+							arr[j] = arr[j+1];
+							arr[j+1] = temp;
+							swaps.push([j, j+1]);
+						}
+					}
+				}
+				displaySwaps(swaps)
+
+	}
+	function selectionSort(arr){
+		clearArr();
+		displayArray(ARR);
+			swaps = [];
+				for (var i = 0; i < LENGTH-1; i++) {
+					let min_idx = i;
+					for (var j = i + 1; j < LENGTH; j++) {
+						if (arr[j] < arr[min_idx]) {
+							min_idx = j;
+						}
+					}
+					temp = arr[min_idx];
+					arr[min_idx] = arr[i];
+					arr[i] = temp;
+					swaps.push([i,min_idx]);
+				}
+				displaySwaps(swaps);
+
+	}
+	function displaySwaps(swaps) {
 			let k = 0;
     			setInterval(function () {
     				if(k < swaps.length){
