@@ -25,10 +25,11 @@
 </body>
 <script type="text/javascript">
 	function initialize() {
-		LENGTH = 10; //length of array.
+		LENGTH = 100; //length of array.
 		MAX_VALUE = 100; //Max value in array.
-		SPEED = 1000;
+		SPEED = 10;
 		ARR = generateRandomArray(LENGTH, MAX_VALUE);
+		SWAPS = [];
 		displayArray(ARR);
 	}
 
@@ -50,6 +51,7 @@
 				console.log('counting');
 				break;
 			case 'quick':
+				quickSort(ARR);
 				console.log('quick');
 				break;
 			case 'radix':
@@ -58,6 +60,70 @@
 		}
 	}
 
+
+	function quickSort(arr) {
+		clearArr();
+		displayArray(ARR);
+		SWAPS = [];
+		quick(arr, 0 , arr.length - 1); 
+		displaySwaps(SWAPS);
+    
+	}
+
+	function swapNodes(idx1, idx2) {
+		if (idx1 != idx2) {
+			  var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
+	    var node1= elements[idx1];
+	    var node2 = elements[idx2];
+	
+		const parent = node2.parentNode;
+		const afterNode2 = node2.nextElementSibling;
+		node1.replaceWith(node2);
+		parent.insertBefore(node1, afterNode2);
+
+		}
+	  
+
+	}
+
+
+	function quick(arr, start, end) {
+		if (start >= end) {
+			return;
+		}
+
+		let index = partition(arr, start,end);
+		quick(arr, start, index - 1);
+		quick(arr, index + 1, end);
+
+	}
+
+	function partition(arr, start,end) {
+		let pivotValue = arr[end];
+		let pivotIndex = start;
+
+		for (let i = start; i < end; i ++) {
+			if (arr[i] < pivotValue) {
+				swap(arr,i, pivotIndex);
+				SWAPS.push([pivotIndex, i]);
+				pivotIndex ++;
+			}
+		}
+
+		swap(arr, pivotIndex, end);
+		SWAPS.push([pivotIndex,end]);
+		return pivotIndex;
+		
+	}
+
+	function swap(arr, idx1, idx2) {
+		var temp = arr[idx1];
+		arr[idx1] = arr[idx2];
+		arr[idx2] = temp;
+	}
+
+
+
 	function clearArr() {
 		const myNode = document.getElementsByClassName('box')[0].getElementsByClassName('array')[0];
 		while (myNode.firstChild) {
@@ -65,6 +131,7 @@
 		}
 
 	}
+
 	function insertionSort(arr) {
 		clearArr();
 		displayArray(ARR);
@@ -107,23 +174,23 @@
 
 
 	function bubbleSort(arr) {
+		SWAPS = [];
 		clearArr();
 		displayArray(ARR);
 		swaps = [];
 				for (let i = 0; i < LENGTH-1; i++) {
 					for(let j = 0; j < LENGTH-i-1; j++) {
 						if(arr[j] > arr[j+1]) {
-							temp = arr[j];
-							arr[j] = arr[j+1];
-							arr[j+1] = temp;
-							swaps.push([j, j+1]);
+							swap(arr, j, j + 1);
+							SWAPS.push([j, j+1]);
 						}
 					}
 				}
-				displaySwaps(swaps)
+				displaySwaps(SWAPS)
 
 	}
 	function selectionSort(arr){
+		SWAPS = [];
 		clearArr();
 		displayArray(ARR);
 			swaps = [];
@@ -137,9 +204,9 @@
 					temp = arr[min_idx];
 					arr[min_idx] = arr[i];
 					arr[i] = temp;
-					swaps.push([i,min_idx]);
+					SWAPS.push([i,min_idx]);
 				}
-				displaySwaps(swaps);
+				displaySwaps(SWAPS);
 
 	}
 	function displaySwaps(swaps) {
@@ -152,18 +219,6 @@
     				clearInterval();
     				},SPEED);
 		}
-
-		function swapNodes(idx1, idx2) {
-	    var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
-	    var node1= elements[idx1];
-	    var node2 = elements[idx2];
-	
-		const parent = node2.parentNode;
-		const afterNode2 = node2.nextElementSibling;
-		node1.replaceWith(node2);
-		parent.insertBefore(node1, afterNode2);
-
-	}
 
  	function generateRandomArray(length, max) {
 		return Array(length).fill().map(() => Math.round(Math.random() * max));
