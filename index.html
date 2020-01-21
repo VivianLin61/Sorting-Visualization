@@ -25,9 +25,10 @@
 </body>
 <script type="text/javascript">
 	function initialize() {
-		LENGTH = 100; //length of array.
+		LENGTH = 1000; //length of array.
 		MAX_VALUE = 100; //Max value in array.
-		SPEED = 10;
+		UNIT = (500/MAX_VALUE);
+		SPEED = 1;
 		ARR = generateRandomArray(LENGTH, MAX_VALUE);
 		SWAPS = [];
 		displayArray(ARR);
@@ -36,6 +37,7 @@
 	function sort(type) {
 		switch (type) {
 			case 'merge':
+				mergeSort(ARR);
 				console.log('merge');
 				break;
 			case 'bubble':
@@ -61,6 +63,74 @@
 	}
 
 
+	function mergeSort(arr) {
+		const animations = doMergeSort(arr);
+		for (let i = 0; i < animations.length; i++) {
+			 var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
+			 setTimeout(() => {
+          const [barOneIdx, newHeight] = animations[i];
+          const barOneStyle = elements[barOneIdx].style;
+          barOneStyle.height = `${newHeight}px`;
+        }, i * SPEED);
+		}
+
+	}
+	function doMergeSort(arr) {
+		const animations = [];
+		if (arr.length <= 1) return arr;
+		const auxArray = arr.slice();
+		sortHelper(arr, 0, arr.length - 1, auxArray, animations);
+
+		return animations;
+
+	}
+
+	function sortHelper(arr, start, end, auxArray, animations) {
+		if (start == end) return;
+		const mid = Math.floor((start + end) / 2);
+		sortHelper(auxArray, start, mid, arr, animations);
+		sortHelper(auxArray, mid + 1, end, arr, animations);
+		merge(arr, start, mid, end, auxArray, animations);
+
+	}
+
+	function merge(arr, start, mid, end, auxArray, animations){
+		let k = start;
+		let i = start;
+		let j = mid + 1;
+
+		while (i <= mid && j <=end) {
+			if (auxArray[i] <= auxArray[j]) {
+				animations.push([k, UNIT *auxArray[i]]);
+				arr[k] = auxArray[i];
+				k++;
+				i++;
+			} else {
+
+				animations.push([k,UNIT * auxArray[j]]);
+				arr[k] = auxArray[j];
+				k++;
+				j++;
+			}
+		}
+
+		while (i <= mid) {
+			animations.push([k, UNIT *auxArray[i]]);
+			arr[k] = auxArray[i];
+			k ++;
+			i ++;
+		}
+
+		while (j <= end) {
+			animations.push([k, UNIT *auxArray[j]]);
+			arr[k] = auxArray[j];
+			k ++;
+			j++;
+		}
+		
+	}
+
+
 	function quickSort(arr) {
 		clearArr();
 		displayArray(ARR);
@@ -82,7 +152,6 @@
 		parent.insertBefore(node1, afterNode2);
 
 		}
-	  
 
 	}
 
