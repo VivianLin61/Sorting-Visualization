@@ -13,8 +13,13 @@
 		<button onclick="sort('selection')"class="tablinks">Selection Sort</button>
 		<button onclick="sort('insertion')"class="tablinks">Insertion Sort</button>
 		<button onclick="sort('quick')"class="tablinks">Quick Sort</button>
-		<button onclick="sort('counting')"class="tablinks">Counting Sort</button>
-		<button onclick="sort('radix')"class="tablinks">Radix Sort</button>
+		<button onclick="generateNewArray();"class="tablinks">GENERATE NEW ARRAY</button>
+
+		 <input type="range" min="5" max="500" value="250" class="slider" id="lenRange">
+
+		</div>
+
+		
 	</div>
 
 	<div class="box">
@@ -25,20 +30,32 @@
 </body>
 <script type="text/javascript">
 	function initialize() {
-		LENGTH = 1000; //length of array.
+		LENGTH = 250; //length of array.
 		MAX_VALUE = 100; //Max value in array.
 		UNIT = (500/MAX_VALUE);
 		SPEED = 1;
+		sorted = false;
 		ARR = generateRandomArray(LENGTH, MAX_VALUE);
 		SWAPS = [];
+		changeSpeed = false;
 		displayArray(ARR);
 	}
 
+	function generateNewArray() {
+		LENGTH = parseInt(document.getElementById("lenRange").value);
+		ARR = generateRandomArray(LENGTH, MAX_VALUE);
+		clearArr();
+		displayArray(ARR);
+		sorted = false;
+	}
+
 	function sort(type) {
+		if (sorted == false) {
+		disableButtons();
+
 		switch (type) {
 			case 'merge':
 				mergeSort(ARR);
-				console.log('merge');
 				break;
 			case 'bubble':
 				bubbleSort(ARR);
@@ -49,30 +66,34 @@
 			case 'insertion':
 				insertionSort(ARR);
 				break;
-			case 'counting':
-				console.log('counting');
-				break;
 			case 'quick':
 				quickSort(ARR);
-				console.log('quick');
 				break;
 			case 'radix':
 				console.log('radix');
 				break;
 		}
 	}
+	}
 
 
 	function mergeSort(arr) {
+		let k = 0;
 		const animations = doMergeSort(arr);
-		for (let i = 0; i < animations.length; i++) {
-			 var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
-			 setTimeout(() => {
-          const [barOneIdx, newHeight] = animations[i];
-          const barOneStyle = elements[barOneIdx].style;
-          barOneStyle.height = `${newHeight}px`;
-        }, i * SPEED);
-		}
+		var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
+    	var interval =setInterval(function () {
+    			if(k < animations.length){
+       		  		 const [barOneIdx, newHeight] = animations[k];
+          			elements[barOneIdx].style.height = `${newHeight}px`;
+       				k++;
+   				} else {
+					enableButtons();
+					sorted = true;
+   					clearInterval(interval);
+   				}
+   				
+   				},SPEED);
+
 
 	}
 	function doMergeSort(arr) {
@@ -130,7 +151,7 @@
 		
 	}
 
-
+//QUiCK SORt
 	function quickSort(arr) {
 		clearArr();
 		displayArray(ARR);
@@ -139,22 +160,6 @@
 		displaySwaps(SWAPS);
     
 	}
-
-	function swapNodes(idx1, idx2) {
-		if (idx1 != idx2) {
-			  var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
-	    var node1= elements[idx1];
-	    var node2 = elements[idx2];
-	
-		const parent = node2.parentNode;
-		const afterNode2 = node2.nextElementSibling;
-		node1.replaceWith(node2);
-		parent.insertBefore(node1, afterNode2);
-
-		}
-
-	}
-
 
 	function quick(arr, start, end) {
 		if (start >= end) {
@@ -222,17 +227,44 @@
 
 	function displayInsertion(insertions) {
 		let k = 0;
-    			setInterval(function () {
-    				if(k < insertions.length){
-        				insert(insertions[k][0],insertions[k][1]);
-        					k++;
-    				}
-    				clearInterval();
-    				},SPEED);
+    	var interval =setInterval(function () {
+    			if(k < insertions.length){
+       		  		insert(insertions[k][0],insertions[k][1]);
+       					k++;
+   				} else {
+					enableButtons();
+					sorted = true;
+   					clearInterval(interval);
+   				}
+   				},SPEED);
 		}
-		
 
-		
+	function disableButtons() {
+		var buttons = document.getElementsByClassName("tablinks");
+		for (var i = 0;  i < buttons.length; i++) {
+			buttons[i].disabled = true;
+		}
+	}
+
+	function enableButtons() {
+		var buttons = document.getElementsByClassName("tablinks");
+		for (var i = 0;  i < buttons.length; i++) {
+			buttons[i].disabled = false;
+		}
+	}	
+	
+	//From https://stackoverflow.com/questions/9732624/how-to-swap-dom-child-nodes-in-javascript
+	function swapNodes(idx1, idx2) {
+	    var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
+	    var node1= elements[idx1];
+	    var node2 = elements[idx2];
+	
+		const parent = node2.parentNode;
+		const afterNode2 = node2.nextElementSibling;
+		node1.replaceWith(node2);
+		parent.insertBefore(node1, afterNode2);
+
+	}
 
 	function insert(keyPos, insertPos) {
 		var elements = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
@@ -258,6 +290,7 @@
 				displaySwaps(SWAPS)
 
 	}
+
 	function selectionSort(arr){
 		SWAPS = [];
 		clearArr();
@@ -280,13 +313,16 @@
 	}
 	function displaySwaps(swaps) {
 			let k = 0;
-    			setInterval(function () {
+    			var interval = setInterval(function () {
     				if(k < swaps.length){
         				swapNodes(swaps[k][0],swaps[k][1]);
         					k++;
+    				} else {
+    					enableButtons();
+    					sorted = true;
+    					clearInterval(interval);
     				}
-    				clearInterval();
-    				},SPEED);
+    			},SPEED);
 		}
 
  	function generateRandomArray(length, max) {
@@ -298,16 +334,26 @@
 		for (i = 0; i < LENGTH; i ++) {
 			var elm = document.createElement("div");
 			elm.className = 'elm';
-			//elm.innerHTML = arr[i];
 			elm.style.backgroundColor = 'black';
 			elm.style.width = "" + width + "px";
 			elm.style.height = "" + (500/MAX_VALUE)*arr[i] + "px";
 			document.body.getElementsByClassName("array")[0].appendChild(elm);
 
 		}
-		console.log(arr);
 	}
 	
+
+	document.addEventListener("keydown", keyPressed);
+
+	function keyPressed() {
+		 if (event.keyCode === 83) {
+		 	changeSpeed = true;
+            speedArray = [1,25,1000];
+            var speedIdx = speedArray.indexOf(SPEED);
+            SPEED = speedArray[(speedIdx + 1) % 3];
+        }
+
+	}
 
 
 
@@ -327,9 +373,6 @@
 	.elm {
 		position: relative;
 		float:left;
-		/*width:0px; /*changes based on number of length of array (1000/SIZE)*/
-		/*height:0px; /*changes based on the value in the array (500/HIGHEST VALUE) * VALUE*/
-		/*background-color:orange;*/
 	}
 	.array {
 	  	/*border: 1px solid black; */
@@ -373,6 +416,40 @@
 		background-color: #ccc;
 	}
 
+	.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: black;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
 
 
 </style>
