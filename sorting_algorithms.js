@@ -24,7 +24,12 @@
 		let j = mid + 1;
 
 		while (i <= mid && j <=end) {
-			//in the sorted auxillary array it chooses the lower value (from L and R)and puts it in the main array.
+			//coloChanges
+			 animations.push([i, j]);
+    		//changeBack
+   			 animations.push([i, j])
+			 //in the sorted auxillary array it chooses the lower value (from L and R)and puts it in the main array.
+
 			if (auxArray[i] <= auxArray[j]) {
 				animations.push([k, UNIT *auxArray[i]]);
 				arr[k] = auxArray[i];
@@ -41,6 +46,9 @@
 
 		//The remaining elements to be copied.
 		while (i <= mid) {
+			animations.push([i, j]);
+    		//changeBack
+   			 animations.push([i, j])
 			animations.push([k, UNIT *auxArray[i]]);
 			arr[k] = auxArray[i];
 			k ++;
@@ -48,6 +56,9 @@
 		}
 
 		while (j <= end) {
+			animations.push([i, j]);
+    		//changeBack
+   			 animations.push([i, j])
 			animations.push([k, UNIT *auxArray[j]]);
 			arr[k] = auxArray[j];
 			k ++;
@@ -82,12 +93,19 @@
 			//if current is smaller than the pivot.
 			if (arr[i] < pivotValue) {
 				swap(arr,i, pivotIndex);//swap the current element and pivotIndex.
+				//coloChanges
+			 	animations.push([pivotIndex, i]);
+    			//changeBack
+   				 animations.push([pivotIndex, i]);
 				animations.push([pivotIndex, i]);
 				pivotIndex ++; //increment the pivotIndex;
 			}
 		}
 		//swap the value at pivotIndex with pivotValue.
 		swap(arr, pivotIndex, end);
+		animations.push([pivotIndex, end]);
+    	//changeBack
+   		 animations.push([pivotIndex, end]);
 		animations.push([pivotIndex,end]);
 		return pivotIndex;
 		
@@ -97,7 +115,7 @@
 	function doInsertionSort(arr) {
 		clearArr();
 		displayArray(ARR);
-			insertions = [];
+			animations = [];
 			for (var i = 1; i < LENGTH; i++) {
 				var key = arr[i]; //the current element to be sorted.
 				var j = i - 1;
@@ -107,29 +125,35 @@
 				}
 				var insert = j + 1; //the postion the current element is inserted.
 				arr[insert] = key; //insert element.
-				insertions.push([i, insert]);
+				//change color
+				animations.push([i,insert]);
+    			//changeBack
+   				animations.push([i,insert]);
+				animations.push([i, insert]);
 			}
 		
-		return insertions;
+		return animations;
 
 	}
 
 //BUBBLE SORT
 //Repeatdly swaps adjacent elements if they are in the wrong order. 
 	function doBubbleSort(arr) {
-		let swaps = [];
+		let animations = [];
 		clearArr();
 		displayArray(ARR);
-		swaps = [];
+		animations = [];
 				for (let i = 0; i < LENGTH-1; i++) {
 					for(let j = 0; j < LENGTH-i-1; j++) {
 						if(arr[j] > arr[j+1]) {
 							swap(arr, j, j + 1);
-							swaps.push([j, j+1]);
+							animations.push([j,j+1]);
+							animations.push([j,j+1]);
+							animations.push([j, j+1]);
 						}
 					}
 				}
-		return swaps;
+		return animations;
 
 	}
 
@@ -137,7 +161,7 @@
 //Sorts an array by repeatedly finding the minimum element from unsorted part and putting
 //it at the beginning.
 function doSelectionSort(arr){
-		let swaps = [];
+		let animations = [];
 		clearArr();
 		displayArray(ARR);
 				for (var i = 0; i < LENGTH-1; i++) {
@@ -150,7 +174,9 @@ function doSelectionSort(arr){
 					temp = arr[min_idx];
 					arr[min_idx] = arr[i];
 					arr[i] = temp;
-					swaps.push([i,min_idx]);
+					animations.push([i,min_idx]);
+					animations.push([i,min_idx]);
+					animations.push([i,min_idx]);
 				}
-		return swaps;
+		return animations;
 	}	
