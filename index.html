@@ -1,62 +1,64 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Sorting Visualiztion</title>
-</head>
-<body>
-	<div id="wrapper"> 
-		<h1>Sorting Visualizer</h1>
-			<div class="menu">
 
-				<div class="left"> 
-					<div class="labels"> 
-						<span class="label" >Sorting Speed:</span>
-						<span  class ="label"class="slider">Array Size:</span>
+<head>
+	<title>Sorting Visualiztion</title>
+</head>
+
+<body>
+	<div id="wrapper">
+		<h1>Sorting Visualizer</h1>
+		<div class="menu">
+
+			<div class="left">
+				<div class="labels">
+					<span class="label">Sorting Speed:</span>
+					<span class="label" class="slider">Array Size:</span>
+				</div>
+
+				<div class="sliders">
+					<div class="sliderDiv">
+						<input class="slider" id="speedRange" type="range" min="1" max="200" step="1" value="100">
 					</div>
-	
-					<div class="sliders">
-						<div class = "sliderDiv"> 
-							<input class="slider" id="speedRange" type="range" min="1" max="200" step="1" value="100">
-						</div>
-						<div class = "sliderDiv">
-				 			<input type="range" min="5" max="200" value="100" class="slider" id="lenRange">
-				 		</div>
+					<div class="sliderDiv">
+						<input type="range" min="5" max="200" value="100" class="slider" id="lenRange">
 					</div>
-				</div>	
-	
-				<div class="right">
-					<button onclick="sort(this,'bubble')"class="tablinks" id="defaultOpen">Bubble Sort</button>
-					<button onclick="sort(this,'merge')"class="tablinks">Merge Sort</button>
-					<button onclick="sort(this,'selection')"class="tablinks">Selection Sort</button>
-					<button onclick="sort(this,'insertion')"class="tablinks">Insertion Sort</button>
-					<button onclick="sort(this,'quick')"class="tablinks">Quick Sort</button>
-					<button onclick="generateNewArray();"class="tablinks">Generate New Array</button>
 				</div>
 			</div>
-	
-			<div class="box">
-				<div class="array"> </div>
- 			</div>
 
- 	</div>
+			<div class="right">
+				<button onclick="sort(this,'bubble')" class="tablinks" id="defaultOpen">Bubble Sort</button>
+				<button onclick="sort(this,'merge')" class="tablinks">Merge Sort</button>
+				<button onclick="sort(this,'selection')" class="tablinks">Selection Sort</button>
+				<button onclick="sort(this,'insertion')" class="tablinks">Insertion Sort</button>
+				<button onclick="sort(this,'quick')" class="tablinks">Quick Sort</button>
+				<button onclick="generateNewArray();" class="tablinks">Generate New Array</button>
+			</div>
+		</div>
+
+		<div class="box">
+			<div class="array"> </div>
+		</div>
+
+	</div>
 
 </body>
- <script src="sorting_algorithms.js" type="text/javascript"></script>
+<script src="sorting_algorithms.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 	LENGTH = 100; //length of array.
 	const MAX_VALUE = 100; //Max value in array.
-	const UNIT = (500/MAX_VALUE);
+	const UNIT = (500 / MAX_VALUE);
 	SPEED = 100; //initial sorting speed.
 	sorted = false;
 	ARR = generateRandomArray(LENGTH, MAX_VALUE);
 	algorithm = ""; //current typee of sort;
-	let animationIdx; 
+	let animationIdx;
 	let interval;
 	let animations;
 	let elementBars;
 	displayArray(ARR);
-	
+
 
 	function generateNewArray() {
 		LENGTH = parseInt(document.getElementById("lenRange").value);
@@ -101,35 +103,35 @@
 		animations = doMergeSort(arr);
 		elementBars = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
 
-   		mergeInterval();
+		mergeInterval();
 	}
 
-	function mergeInterval(speed) {	
-		 	interval =setInterval(function () {
-		 		
-    			if(animationIdx < animations.length){
-    				const colorChange = animationIdx % 3 != 2;
-    				if (colorChange) {
-    					const [idx1, idx2] = animations[animationIdx];
-						const color = animationIdx % 3 === 0 ? 'green' : 'black';
-						if (elementBars[idx1] && elementBars[idx2]) {
-							elementBars[idx1].style.backgroundColor = color;
-    						elementBars[idx2].style.backgroundColor = color;
-						}
+	function mergeInterval(speed) {
+		interval = setInterval(function () {
+
+			if (animationIdx < animations.length) {
+				const colorChange = animationIdx % 3 != 2;
+				if (colorChange) {
+					const [idx1, idx2] = animations[animationIdx];
+					const color = animationIdx % 3 === 0 ? 'green' : 'black';
+					if (elementBars[idx1] && elementBars[idx2]) {
+						elementBars[idx1].style.backgroundColor = color;
+						elementBars[idx2].style.backgroundColor = color;
 					}
-    				else {
-    					const [barOneIdx, newHeight] = animations[animationIdx];
-          				elementBars[barOneIdx].style.height = `${newHeight}px`;
-    				}
-       		  		
-       				animationIdx++;
-   				} else {
-					enableButtons();
-					sorted = true;
-   					clearInterval(interval);
-   				}
-   				
-   				},SPEED);
+				}
+				else {
+					const [barOneIdx, newHeight] = animations[animationIdx];
+					elementBars[barOneIdx].style.height = `${newHeight}px`;
+				}
+
+				animationIdx++;
+			} else {
+				enableButtons();
+				sorted = true;
+				clearInterval(interval);
+			}
+
+		}, SPEED);
 	}
 
 	function insertionSort(arr) {
@@ -137,34 +139,34 @@
 		elementBars = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
 		animations = doInsertionSort(arr);
 		insertionInterval();
-		}
+	}
 
 	function insertionInterval() {
-		interval =setInterval(function () {
-    			if(animationIdx < animations.length){
-    				//inserts the element at keyPos before the element at insertPos.
-    				const [keyPos, insertPos] = animations[animationIdx];
-    				var parent = elementBars[keyPos].parentNode;
-					var elm = elementBars[keyPos];
-					var insert = elementBars[insertPos];
-					const colorChange = animationIdx % 3 != 2;
-					if (colorChange) {
-						const color = animationIdx % 3 === 0 ? 'green' : 'black';
-						if (elm && insert) {
-							elm.style.backgroundColor = color;
-    						insert.style.backgroundColor = color;
-						}
+		interval = setInterval(function () {
+			if (animationIdx < animations.length) {
+				//inserts the element at keyPos before the element at insertPos.
+				const [keyPos, insertPos] = animations[animationIdx];
+				var parent = elementBars[keyPos].parentNode;
+				var elm = elementBars[keyPos];
+				var insert = elementBars[insertPos];
+				const colorChange = animationIdx % 3 != 2;
+				if (colorChange) {
+					const color = animationIdx % 3 === 0 ? 'green' : 'black';
+					if (elm && insert) {
+						elm.style.backgroundColor = color;
+						insert.style.backgroundColor = color;
 					}
-    				else {
-    					parent.insertBefore(elm,insert);
-    				}
-       				animationIdx++;
-   				} else {
-					enableButtons();
-					sorted = true;
-   					clearInterval(interval);
-   				}
-   			},SPEED);
+				}
+				else {
+					parent.insertBefore(elm, insert);
+				}
+				animationIdx++;
+			} else {
+				enableButtons();
+				sorted = true;
+				clearInterval(interval);
+			}
+		}, SPEED);
 	}
 
 
@@ -174,7 +176,7 @@
 		animationIdx = 0;
 		elementBars = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
 		animations = [];
-		quick(arr, 0 , arr.length - 1); 
+		quick(arr, 0, arr.length - 1);
 
 		swappingAnimationsInterval();
 	}
@@ -193,36 +195,36 @@
 	function selectionSort(arr) {
 		animations = doSelectionSort(arr);
 		elementBars = document.body.getElementsByClassName('box')[0].getElementsByClassName('array')[0].getElementsByClassName('elm');
-		animationIdx= 0;
+		animationIdx = 0;
 
 		swappingAnimationsInterval();
 	}
 
 	//loops through the animations and shows the swapping.
 	function swappingAnimationsInterval() {
-    	 interval = setInterval(function () {
-   			if(animationIdx < animations.length){
- 				const [pos1, pos2] = animations[animationIdx];
- 				var node1= elementBars[pos1];
-	    		var node2 = elementBars[pos2];
-	    		const colorChange = animationIdx % 3 != 2;
+		interval = setInterval(function () {
+			if (animationIdx < animations.length) {
+				const [pos1, pos2] = animations[animationIdx];
+				var node1 = elementBars[pos1];
+				var node2 = elementBars[pos2];
+				const colorChange = animationIdx % 3 != 2;
 				if (colorChange) {
 					const color = animationIdx % 3 === 0 ? 'green' : 'black';
 					if (node1 && node2) {
 						node1.style.backgroundColor = color;
-    					node2.style.backgroundColor = color;
+						node2.style.backgroundColor = color;
 					}
 				}
-	    		else {
-	    			swapNodes(node1,node2);
-	    		}
-        		animationIdx ++;
-    		} else {
-    			enableButtons();
-    			sorted = true;
-    			clearInterval(interval);
-    		}
-    	},SPEED);
+				else {
+					swapNodes(node1, node2);
+				}
+				animationIdx++;
+			} else {
+				enableButtons();
+				sorted = true;
+				clearInterval(interval);
+			}
+		}, SPEED);
 	}
 
 	//From https://stackoverflow.com/questions/9732624/how-to-swap-dom-child-nodes-in-javascript
@@ -234,7 +236,7 @@
 		parent.insertBefore(node1, afterNode2);
 
 	}
-		function swap(arr, idx1, idx2) {
+	function swap(arr, idx1, idx2) {
 		var temp = arr[idx1];
 		arr[idx1] = arr[idx2];
 		arr[idx2] = temp;
@@ -242,7 +244,7 @@
 
 	function disableButtons() {
 		var buttons = document.getElementsByClassName("tablinks");
-		for (let i = 0;  i < buttons.length; i++) {
+		for (let i = 0; i < buttons.length; i++) {
 			buttons[i].disabled = true;
 			buttons[i].style.opacity = '0.5';
 		}
@@ -250,13 +252,13 @@
 
 	function enableButtons() {
 		var buttons = document.getElementsByClassName("tablinks");
-		for (let i = 0;  i < buttons.length; i++) {
+		for (let i = 0; i < buttons.length; i++) {
 			buttons[i].style.color = 'black';
 			buttons[i].disabled = false;
 			buttons[i].style.opacity = '1';
 		}
-	}	
-	
+	}
+
 
 	function clearArr() {
 		const myNode = document.getElementsByClassName('box')[0].getElementsByClassName('array')[0];
@@ -265,15 +267,15 @@
 		}
 
 	}
- 	
+
 	function displayArray(arr) {
-		width = 1000/LENGTH; //width of each bar
-		for (i = 0; i < LENGTH; i ++) {
+		width = 1000 / LENGTH; //width of each bar
+		for (i = 0; i < LENGTH; i++) {
 			var elm = document.createElement("div");
 			elm.className = 'elm';
-			elm.style.backgroundColor = 'black'; 
+			elm.style.backgroundColor = 'black';
 			elm.style.width = "" + width + "px";
-			elm.style.height = "" + (500/MAX_VALUE)*arr[i] + "px";
+			elm.style.height = "" + (500 / MAX_VALUE) * arr[i] + "px";
 			document.body.getElementsByClassName("array")[0].appendChild(elm);
 		}
 	}
@@ -289,37 +291,37 @@
 			clearInterval(interval);
 
 			switch (algorithm) {
-			case 'merge':
-				mergeInterval();
-				break;
-			case 'bubble':
-				swappingAnimationsInterval();
-				break;
-			case 'selection':
-				swappingAnimationsInterval();
-				break;
-			case 'insertion':
-				insertionInterval();
-				break;
-			case 'quick':
-				swappingAnimationsInterval();
-				break;
-		}
+				case 'merge':
+					mergeInterval();
+					break;
+				case 'bubble':
+					swappingAnimationsInterval();
+					break;
+				case 'selection':
+					swappingAnimationsInterval();
+					break;
+				case 'insertion':
+					insertionInterval();
+					break;
+				case 'quick':
+					swappingAnimationsInterval();
+					break;
+			}
 		}
 
 
-		
+
 	}
 
 	var slide = document.getElementById('speedRange');
 
-	slide.onchange = function() {
-   		SPEED = parseInt(slide.value);
-        updateSpeed();
+	slide.onchange = function () {
+		SPEED = 205 - parseInt(slide.value);
+		updateSpeed();
 	}
 
 
 </script>
 <link rel="stylesheet" href="styles.css">
-</style>
+
 </html>
