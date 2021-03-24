@@ -1,6 +1,6 @@
 # Sorting-Visualization
 This is sorting algorithms visualizer with 5 different popular sorting algoriths.\
-Algorithims Included:
+# Algorithims Included:
 * Quick Sort
 * Bubble Sort
 * Merge Sort
