@@ -38,7 +38,7 @@ body {
 }
 .box {
   display: flex;
-  margin-top: 50px;
+  margin-top: 25px;
   flex-direction: column;
   height: 500px;
   background-color: var(--main-bg-color);
